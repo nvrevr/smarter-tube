@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Prevent YouTube Reload & Go Back to Homepage
+// @name         Prevent YouTube Reload When Navigating Back To The Homepage
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  stops youtube from reloading the page when you click page back
