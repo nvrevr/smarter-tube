@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         Block YouTube Shorts with Toggle
+// @name         smarter-tube-no-shorts
 // @version      1.3
 // @author       nvr
 // @match        *://www.youtube.com/*
 // @grant        GM.xmlHttpRequest
 // @run-at       document-end
+// @downloadURL  https://github.com/nvrevr/smarter-tube
+// this is one of half of the scripts in smarter-tube. if you paid for this, you were scammed
 // ==/UserScript==
 
 (function() {
@@ -60,7 +62,7 @@
 
     removeShorts();
     addToggleButton();
-    
+
     const observer = new MutationObserver(() => {
         removeShorts();
         addToggleButton();
