@@ -1,0 +1,69 @@
+// ==UserScript==
+// @name         Block YouTube Shorts with Toggle
+// @version      1.3
+// @author       nvr
+// @match        *://www.youtube.com/*
+// @grant        GM.xmlHttpRequest
+// @run-at       document-end
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    let shortsEnabled = localStorage.getItem('shortsEnabled') !== 'false';
+
+    function removeShorts() {
+        if (!shortsEnabled) return;
+
+        document.querySelectorAll('ytd-rich-section-renderer, ytd-reel-shelf-renderer').forEach(el => el.remove());
+        document.querySelectorAll('ytd-guide-entry-renderer, ytd-mini-guide-entry-renderer').forEach(el => {
+            if (el.textContent.includes('Shorts')) el.remove();
+        });
+        document.querySelectorAll('ytd-video-renderer, ytd-grid-video-renderer').forEach(el => {
+            if (el.querySelector('a#thumbnail')?.href.includes('shorts/')) el.remove();
+        });
+        document.querySelectorAll('ytd-reel-item-renderer').forEach(el => el.remove());
+    }
+
+    function toggleShorts() {
+        shortsEnabled = !shortsEnabled;
+        localStorage.setItem('shortsEnabled', shortsEnabled);
+        alert(`YouTube Shorts are now ${shortsEnabled ? 'hidden' : 'visible'}`);
+        location.reload();
+    }
+
+    function addToggleButton() {
+        const sidebar = document.querySelector('#sections');
+        if (!sidebar || document.getElementById('toggleShortsButton')) return;
+
+        const button = document.createElement('yt-formatted-string');
+        button.id = 'toggleShortsButton';
+        button.textContent = `Shorts: ${shortsEnabled ? 'ON' : 'OFF'}`;
+        button.style.cssText = `
+            cursor: pointer;
+            padding: 10px;
+            margin: 10px;
+            background-color: #cc0000;
+            color: white;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: block;
+        `;
+        button.onclick = () => {
+            toggleShorts();
+            button.textContent = `Shorts: ${shortsEnabled ? 'ON' : 'OFF'}`;
+        };
+
+        sidebar.prepend(button);
+    }
+
+    removeShorts();
+    addToggleButton();
+    
+    const observer = new MutationObserver(() => {
+        removeShorts();
+        addToggleButton();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+})();
