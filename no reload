@@ -1,0 +1,26 @@
+// ==UserScript==
+// @name         Prevent YouTube Reload & Go Back to Homepage
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  stops youtube from reloading the page when you click page back
+// @author       nvr
+// @match        *://www.youtube.com/*
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+    let lastNavigationTime = performance.now();
+
+    window.addEventListener('beforeunload', function(event) {
+        let now = performance.now();
+
+        if (now - lastNavigationTime < 2000) {
+            event.preventDefault();
+            location.href = "https://www.youtube.com";
+        }
+
+        lastNavigationTime = now;
+    });
+})();
