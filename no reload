@@ -1,11 +1,13 @@
 // ==UserScript==
-// @name         Prevent YouTube Reload When Navigating Back To The Homepage
+// @name         smarter-tube-no-reload
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  stops youtube from reloading the page when you click page back
 // @author       nvr
 // @match        *://www.youtube.com/*
 // @grant        none
+// @downloadURL  https://github.com/nvrevr/smarter-tube
+// this is one of half of the scripts in smarter-tube. if you paid for this, you were scammed
 // ==/UserScript==
 
 (function() {
@@ -16,6 +18,7 @@
     window.addEventListener('beforeunload', function(event) {
         let now = performance.now();
 
+        // If the page is trying to reload within 2 seconds, redirect to homepage
         if (now - lastNavigationTime < 2000) {
             event.preventDefault();
             location.href = "https://www.youtube.com";
